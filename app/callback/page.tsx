@@ -10,12 +10,13 @@ export default function Callback(){
     const clientId = 'b93207dfa52d42bfbbe1d17b613fd963';
     const url = 'https://accounts.spotify.com/api/token'
 
-    let payload: any;
-
     if (typeof window !== "undefined") {
+        auth();
+    }
+
+    async function auth() {
         const codeVerifier = window.localStorage.getItem('code_verifier') ?? '';
-    
-        payload = {
+        const payload = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -28,11 +29,6 @@ export default function Callback(){
                 code_verifier: codeVerifier,
             }),
         }
-
-        auth();
-    }
-
-    async function auth() {
         const body = await fetch(url, payload);
         const response = await body.json();
         if (response['access_token'] !== undefined) {

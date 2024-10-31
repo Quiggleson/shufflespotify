@@ -5,8 +5,6 @@ import { useState } from "react";
 
 export default function Login() {
 
-    const [codeVerifier, setcodeVerifier] = useState('');
-    const [codeChallenge, setCodeChallenge] = useState('');
     const [message, setMessage] = useState('');
     const clientId = 'b93207dfa52d42bfbbe1d17b613fd963';
     const redirectUri = process.env.NEXT_PUBLIC_CALLBACK_URL!;
@@ -33,8 +31,6 @@ export default function Login() {
         const codeVerifier  = generateRandomString(64);
         const hashed = await sha256(codeVerifier)
         const codeChallenge = base64encode(hashed);
-        setcodeVerifier(codeVerifier);
-        setCodeChallenge(codeChallenge);
         window.localStorage.setItem('code_verifier', codeVerifier);
         params.code_challenge = codeChallenge;
     }

@@ -30,8 +30,8 @@ export async function randomize(access_token: string, playlistId: string, setSta
         const body = await response.json();
         url = body['next']
         // Get list of uri's
-        body['items'].forEach((item: any) => {
-            uris.push(item['track']['uri']);
+        body['items'].forEach((item: {track: Track}) => {
+            uris.push(item.track.uri);
             console.log(JSON.stringify(item));
         });
         setStatus('getting playlist ' + body['offset'] + ' out of ' + body['total']);
@@ -45,7 +45,7 @@ export async function randomize(access_token: string, playlistId: string, setSta
     while (currentIndex != 0) {
 
         // Pick a remaining element...
-        let randomIndex = Math.floor(Math.random() * currentIndex);
+        const randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
         // And swap it with the current element.
@@ -57,7 +57,7 @@ export async function randomize(access_token: string, playlistId: string, setSta
 
     // clear old songs
     // PUT one song
-    let cleanuris = JSON.stringify(uris[0]).replaceAll("\"", "");
+    const cleanuris = JSON.stringify(uris[0]).replaceAll("\"", "");
     url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=" + cleanuris;
     const payload = {
         method: 'PUT',
@@ -106,7 +106,7 @@ export async function randomize(access_token: string, playlistId: string, setSta
                 'Authorization': 'Bearer ' + access_token
             },
         }
-        const response = await fetch(url, payload);
+        await fetch(url, payload);
         i += trackspercall;
     }
     setStatus('Complete');

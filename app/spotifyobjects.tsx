@@ -3,12 +3,12 @@ interface Playlist {
     name: string
 }
 
-interface TracksResponse {
-    next: string,
-    offset: number,
-    total: number,
-    items: Track[]
-}
+// interface TracksResponse {
+//     next: string,
+//     offset: number,
+//     total: number,
+//     items: Track[]
+// }
 
 interface Track {
     name: string,

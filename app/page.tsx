@@ -1,5 +1,3 @@
-import TopNav from "./topnav";
-
 export default function Home() {
   return (
     <div className="ml-2">
