@@ -17,7 +17,7 @@ export async function randomize(access_token: string, playlistId: string, setSta
 
     const uris: string[] = [];
     const fields = '?fields=next,offset,total,items(track(name,href,id,uri))'
-    const limit = '&limit=2'
+    const limit = '&limit=50'
     let url = 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks' + fields + limit;
     while (url !== null) {
         const payload = {
@@ -32,7 +32,6 @@ export async function randomize(access_token: string, playlistId: string, setSta
         // Get list of uri's
         body['items'].forEach((item: {track: Track}) => {
             uris.push(item.track.uri);
-            console.log(JSON.stringify(item));
         });
         setStatus('getting playlist ' + body['offset'] + ' out of ' + body['total']);
     }
@@ -86,7 +85,7 @@ export async function randomize(access_token: string, playlistId: string, setSta
 
     // insert new songs
     let i = 0;
-    const trackspercall = 1
+    const trackspercall = 100
     while (i < unique.length) {
         setStatus('inserting new songs ' + i + ' out of ' + unique.length);
         

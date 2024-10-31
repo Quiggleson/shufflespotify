@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 export default function Login() {
 
@@ -15,7 +15,7 @@ export default function Login() {
     const params = {
         response_type: 'code',
         client_id: clientId,
-        scope, 
+        scope,
         code_challenge_method: 'S256',
         code_challenge: '',
         redirect_uri: redirectUri
@@ -28,7 +28,7 @@ export default function Login() {
     }
 
     async function generateCodeChallenge() {
-        const codeVerifier  = generateRandomString(64);
+        const codeVerifier = generateRandomString(64);
         const hashed = await sha256(codeVerifier)
         const codeChallenge = base64encode(hashed);
         window.localStorage.setItem('code_verifier', codeVerifier);
@@ -42,15 +42,17 @@ export default function Login() {
     }
 
     return (
-        <div className="ml-2">
-            <p className="text-2xl font-bold mb-2">Login</p>
-            {message.length > 0 && 
-                <div className="my-2">
-                    <p>{message}</p>
-                </div>
-            }
-            <button className="outline px-2 rounded hover:bg-white" onClick={() => auth()}>Authorize</button>
-        </div>
+        <Suspense>
+            <div className="ml-2">
+                <p className="text-2xl font-bold mb-2">Login</p>
+                {message.length > 0 &&
+                    <div className="my-2">
+                        <p>{message}</p>
+                    </div>
+                }
+                <button className="outline px-2 rounded hover:bg-white" onClick={() => auth()}>Authorize</button>
+            </div>
+        </Suspense>
     );
 }
 
@@ -69,8 +71,8 @@ const sha256 = async (plain: string) => {
 
 const base64encode = (input: ArrayBuffer) => {
     return btoa(String.fromCharCode(...new Uint8Array(input)))
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
+        .replace(/=/g, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
 }
 

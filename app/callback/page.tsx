@@ -1,8 +1,9 @@
 'use client';
 
 import { redirect, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function Callback(){
+export default function Callback() {
 
     const searchParams = useSearchParams()
 
@@ -25,7 +26,7 @@ export default function Callback(){
                 client_id: clientId,
                 grant_type: 'authorization_code',
                 code,
-                redirect_uri: 'http://localhost:3000/callback',
+                redirect_uri: process.env.NEXT_PUBLIC_CALLBACK_URL!,
                 code_verifier: codeVerifier,
             }),
         }
@@ -39,8 +40,8 @@ export default function Callback(){
 
 
     return (
-    <div>
-        <p>This page should redirect you</p>
-    </div>
+        <Suspense>
+            <p>This page should redirect you</p>
+        </Suspense>
     );
 }
